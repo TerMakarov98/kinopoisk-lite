@@ -30,7 +30,13 @@ class Request
         return strtok($this->server['REQUEST_URI'], '?');
     }
 
-    public function method(): string{
+    public function method(): string
+    {
         return $this->server['REQUEST_METHOD'];
+    }
+
+    public function input(string $key, $default = null): mixed
+    {
+        return $this->post[$key] ?? $this->get[$key] ?? $default;
     }
 }

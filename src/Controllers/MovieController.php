@@ -2,10 +2,24 @@
 
 namespace App\Controllers;
 
-class MovieController
+use App\Kernel\Controller\Controller;
+use App\Kernel\View\View;
+
+class MovieController extends Controller
 {
-    public static function index(): void
+    public function index(): void
     {
-        include_once APP_PATH.'/views/pages/movies.php';
+       $this->view('movies');
+    }
+
+    public function add(): void
+    {
+        $this->view('admin/movies/add');
+    }
+
+    public function store(): void
+    {
+//        dd($this->request()->input('name'));
+        dd($_POST['name']);
     }
 }
