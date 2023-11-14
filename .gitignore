@@ -1,3 +1,4 @@
 #GitIgnore configuration
 .idea/
 .vendor/
+public/storage

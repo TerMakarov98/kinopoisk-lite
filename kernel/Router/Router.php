@@ -2,14 +2,34 @@
 
 namespace App\Kernel\Router;
 
-class Router
+use App\Kernel\Auth\AuthInterface;
+use App\Kernel\Controller\Controller;
+use App\Kernel\Database\DatabaseInterface;
+use App\Kernel\Http\RedirectInterface;
+use App\Kernel\Http\RequestInterface;
+use App\Kernel\Middleware\AbstractMiddleware;
+use App\Kernel\Middleware\MiddlewareInterface;
+use App\Kernel\Session\SessionInterface;
+use App\Kernel\Storage\Storage;
+use App\Kernel\Storage\StorageInterface;
+use App\Kernel\View\ViewInterface;
+
+class Router implements RouterInterface
 {
     private array $routes = [
         'GET' => [],
         'POST' => [],
     ];
 
-    public function __construct()
+    public function __construct(
+        private ViewInterface $view,
+        private RequestInterface $request,
+        private RedirectInterface $redirect,
+        private SessionInterface $session,
+        private DatabaseInterface $database,
+        private AuthInterface $auth,
+        private StorageInterface $storage,
+    )
     {
         $this->initRoutes();
     }
@@ -22,10 +42,28 @@ class Router
             $this->notFound();
         }
 
+        if ($rout->hasMiddleware()) {
+            foreach ($rout->getMiddleware() as $middleware) {
+                 /** @var AbstractMiddleware $middleware */
+                $middleware = new $middleware($this->request, $this->auth, $this->redirect);
+
+                $middleware->handle();
+            }
+        }
+
         if (is_array($rout->getAction())) {
             [$controller, $action] = $rout->getAction();
+
+            /** @var Controller $controller */
             $controller = new $controller();
 
+            call_user_func([$controller, 'setView'], $this->view);
+            call_user_func([$controller, 'setRequest'], $this->request);
+            call_user_func([$controller, 'setRedirect'], $this->redirect);
+            call_user_func([$controller, 'setSession'], $this->session);
+            call_user_func([$controller, 'setDatabase'], $this->database);
+            call_user_func([$controller, 'setAuth'], $this->auth);
+            call_user_func([$controller, 'setStorage'], $this->storage);
             call_user_func([$controller, $action]);
         }else{
             call_user_func($rout->getAction());
