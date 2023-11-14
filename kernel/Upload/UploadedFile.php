@@ -29,7 +29,8 @@ class UploadedFile implements UploadedFileInterface
         $filePath = $storagePath . "/" . $fileName;
 
         if (move_uploaded_file($this->tmp_name, $filePath)) {
-            return "storage/$path/$fileName";
+            return "$path/$fileName";
+//            return "storage/$path/$fileName";
         }
         return false;
     }

@@ -11,7 +11,7 @@ class MovieController extends Controller
 {
     public function index(): void
     {
-       $this->view('movies');
+        $this->view('movies');
     }
 
     public function add(): void
@@ -21,14 +21,16 @@ class MovieController extends Controller
 
     public function store(): void
     {
+
         $file = $this->request()->file('image');
-        dd($file->move('movies', 't.png'));
+        $filePath = $file->move('movies');
+        dd($this->storage()->url($filePath));
 
         $validation = $this->request()->validate([
             'name' => ['required', 'min:3', 'max:50'],
         ]);
 
-        if (! $validation) {
+        if (!$validation) {
             foreach ($this->request()->errors() as $field => $errors) {
                 $this->session()->set($field, $errors);
             }
