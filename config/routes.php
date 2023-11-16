@@ -4,6 +4,7 @@ use App\Controllers\AdminController;
 use App\Controllers\CategoryController;
 use App\Controllers\HomeController;
 use App\Controllers\LoginController;
+use App\Controllers\MovieController;
 use App\Controllers\RegisterController;
 use App\Kernel\Router\Route;
 use App\Middleware\GuestMiddleware;
@@ -24,7 +25,8 @@ return [
     Route::post('/admin/categories/destroy', [CategoryController::class, 'destroy']),
     Route::get('/admin/categories/update', [CategoryController::class, 'edit']),
     Route::post('/admin/categories/update', [CategoryController::class, 'update']),
-
+    Route::get('/admin/movies/add', [MovieController::class, 'create']),
+    Route::post('/admin/movies/add', [MovieController::class, 'store']),
 
 //    Route::get('/movies', [MovieController::class, 'index']),
 //    Route::get('/admin/movies/add', [MovieController::class, 'add'], [AuthMiddleware::class]),

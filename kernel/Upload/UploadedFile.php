@@ -19,25 +19,26 @@ class UploadedFile implements UploadedFileInterface
 
     public function move(string $path, string $fileName = null): string|false
     {
-        $storagePath = APP_PATH . "/storage/$path";
+        $storagePath = APP_PATH."/storage/$path";
 
-        if (!is_dir($storagePath)) {
+        if (! is_dir($storagePath)) {
             mkdir($storagePath, 0777, true);
         }
 
         $fileName = $fileName ?? $this->randomFileName();
-        $filePath = $storagePath . "/" . $fileName;
+
+        $filePath = "$storagePath/$fileName";
 
         if (move_uploaded_file($this->tmp_name, $filePath)) {
             return "$path/$fileName";
-//            return "storage/$path/$fileName";
         }
+
         return false;
     }
 
     private function randomFileName(): string
     {
-        return md5(uniqid(rand(), true)) . ".{$this->getExtension()}";
+        return md5(uniqid(rand(), true)).".{$this->getExtension()}";
     }
 
     public function getExtension(): string
