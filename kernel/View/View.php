@@ -13,15 +13,17 @@ class View implements ViewInterface
         private AuthInterface $auth
     ){}
 
-    public function page(string $name): void
+    public function page(string $name, array $data = [], string $title = ''): void
     {
+        $this->title = $title;
 
-        $viewPath = APP_PATH . "/views/pages/$name.php";
+        $viewPath = APP_PATH."/views/pages/$name.php";
 
-        if (!file_exists($viewPath)) {
+        if (! file_exists($viewPath)) {
             throw new ViewNotFoundException("View $name not found");
         }
-        extract($this->defaultData());
+
+        extract(array_merge($this->defaultData(), $data));
 
         include_once $viewPath;
     }
@@ -48,5 +50,10 @@ class View implements ViewInterface
             'session' => $this->session,
             'auth' => $this->auth
         ];
+    }
+
+    public function title(): string
+    {
+        return $this->title;
     }
 }

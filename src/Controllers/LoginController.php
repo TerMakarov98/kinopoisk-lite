@@ -9,7 +9,6 @@ class LoginController extends Controller
     public function index(): void
     {
         $this->view(name: 'login');
-//        $this->view(name: 'login', title: 'Вход');
     }
 
     public function login()
@@ -17,9 +16,13 @@ class LoginController extends Controller
         $email = $this->request()->input('email');
         $password = $this->request()->input('password');
 
-        $this->auth()->attempt($email, $password);
+        if ($this->auth()->attempt($email, $password)) {
+            $this->redirect('/');
+        }
 
-        $this->redirect('/');
+        $this->session()->set('error', 'Не верный e-mail или пароль');
+
+        $this->redirect('/login');
     }
 
     public function logout(): void

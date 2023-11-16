@@ -64,7 +64,7 @@ class Validator implements ValidatorInterface
                 break;
             case 'confirmed':
                 if ($value !== $this->data["{$key}_confirmation"]) {
-                    return "Field $key must be confirmed";
+                    return  ucfirst($key) ."s must match";
                 }
                 break;
         }

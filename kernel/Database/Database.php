@@ -54,6 +54,57 @@ class Database implements DatabaseInterface
 
         return $result ?: null;
     }
+
+    public function get(string $table, array $conditions = []): array
+    {
+        $where = '';
+
+        if (count($conditions) > 0) {
+            $where = 'WHERE '.implode(' AND ', array_map(fn ($field) => "$field = :$field", array_keys($conditions)));
+        }
+
+        $sql = "SELECT * FROM $table $where";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute($conditions);
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function delete(string $table, array $conditions = []): void
+    {
+        $where = '';
+
+        if (count($conditions) > 0) {
+            $where = 'WHERE '.implode(' AND ', array_map(fn ($field) => "$field = :$field", array_keys($conditions)));
+        }
+
+        $sql = "DELETE FROM $table $where";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute($conditions);
+    }
+
+    public function update(string $table, array $data, array $conditions = []): void
+    {
+        $fields = array_keys($data);
+
+        $set = implode(', ', array_map(fn ($field) => "$field = :$field", $fields));
+
+        $where = '';
+
+        if (count($conditions) > 0) {
+            $where = 'WHERE '.implode(' AND ', array_map(fn ($field) => "$field = :$field", array_keys($conditions)));
+        }
+
+        $sql = "UPDATE $table SET $set $where";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute(array_merge($data, $conditions));
+    }
     private function connect()
     {
         $driver = $this->config->get('database.driver');
