@@ -3,6 +3,7 @@
  * @var \App\Kernel\View\ViewInterface $view
  * @var \App\Kernel\Session\SessionInterface $session
  * @var array<\App\Models\Category> $categories
+ * @var \App\Models\Movie $movie
  */
 ?>
 
@@ -13,18 +14,22 @@ $view->component('start');
 
 <main>
     <div class="container">
-        <h3 class="mt-3">Добавление фильма</h3>
+        <h3 class="mt-3">Редактирование фильма</h3>
         <hr>
     </div>
     <div class="container d-flex justify-content-start">
 
 
-        <form action="/admin/movies/add" method="post" enctype="multipart/form-data" class="d-flex flex-column justify-content-center w-50 gap-2 mt-5 mb-5">
+        <form action="/admin/movies/update" method="post" enctype="multipart/form-data" class="d-flex flex-column justify-content-center w-50 gap-2 mt-5 mb-5">
+            <input type="hidden" name="id" value="<?= $movie->id() ?>">
             <div class="row g-2">
                 <div class="col-md">
                     <div class="form-floating">
-                        <input type="text" name="name"
-                               class="form-control <?= $session->has('name') ? 'is-invalid' : ''; ?>" id="name"
+                        <input type="text"
+                               name="name"
+                               value="<?= $movie->name() ?>"
+                               class="form-control <?= $session->has('name') ? 'is-invalid' : ''; ?>"
+                               id="name"
                                placeholder="Название фильма">
                         <label for="name">Название фильма</label>
                         <?php if ($session->has('name')) { ?>
@@ -45,6 +50,7 @@ $view->component('start');
                                   class="form-control <?= $session->has('email') ? 'is-invalid' : ''; ?>"
                                   id="description"
                                   placeholder="">
+                            <?= $movie->description() ?>
                         </textarea>
                         <label for="description">Описание</label>
                         <?php if ($session->has('description')) { ?>
@@ -67,15 +73,17 @@ $view->component('start');
             </div>
             <div class="row g-2">
                 <select name="category" class="form-select" aria-label="Default select example">
-                    <option selected>Выберите жанр</option>
+                    <option>Выберите жанр</option>
 
                     <?php foreach ($categories as $category) { ?>
-                    <option value="<?= $category->id() ?>"><?= $category->name() ?></option>
+                    <option value="<?= $category->id() ?>" <?= $category->id() == $movie->category() ? 'selected' : ''; ?>>
+                        <?= $category->name() ?>
+                    </option>
                     <?php } ?>
                 </select>
             </div>
             <div class="row g-2">
-                <button type="submit" class="btn btn-primary">Добавить</button>
+                <button type="submit" class="btn btn-success">Сохранить</button>
             </div>
         </form>
     </div>

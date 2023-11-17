@@ -13,9 +13,12 @@ class RegisterController extends Controller
 
     public function register(): void
     {
+
         $validation = $this->request()->validate([
+            'name' => ['required', 'min:3', 'max:50'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'min:8'],
+            'password' => ['required', 'min:8', 'max:255', 'confirmed'],
+            'password_confirmation' => ['required', 'min:8', 'max:255'],
         ]);
 
         if (!$validation) {
@@ -25,11 +28,13 @@ class RegisterController extends Controller
             $this->redirect('/register');
         }
 
-        $userId = $this->db()->insert('users', [
+        $this->db()->insert('users', [
+            'name' => $this->request()->input('name'),
             'email' => $this->request()->input('email'),
             'password' => password_hash($this->request()->input('password'), PASSWORD_DEFAULT),
         ]);
 
-        dd('User created with id: ' . $userId);
+        $this->redirect('/');
+//        $this->redirect('/login');
     }
 }
