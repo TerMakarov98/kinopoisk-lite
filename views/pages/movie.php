@@ -20,8 +20,9 @@ $view->component('start');
                     <div class="col-md-4">
                         <img  src="<?= $storage->url($movie->preview()) ?>" class="img-fluid rounded one-movie__image" alt="<?= $movie->name() ?>">
                         <?php if ($auth->check()){ ?>
-                        <form action="" class="m-3 w-100">
-                            <select class="form-select" aria-label="Default select example">
+                        <form action="/reviews/add" method="post" class="m-3 w-100">
+                            <input type="hidden" name="id" value="<?= $movie->id() ?>">
+                            <select class="form-select <?= $session->has('rating') ? 'is-invalid' : '' ?>" name="rating" aria-label="Default select example">
                                 <option selected>Оценка</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -34,11 +35,25 @@ $view->component('start');
                                 <option value="9">9</option>
                                 <option value="10">10</option>
                             </select>
+                            <?php if ($session->has('rating')) { ?>
+                                <?php foreach ($session->getFlash('rating  ') as $error) {?>
+                                    <div id="password" class="invalid-feedback">
+                                        <?= $error ?>
+                                    </div>
+                                <?php } ?>
+                            <?php } ?>
                             <div class="form-floating mt-2">
-                                <textarea class="form-control" placeholder="Укажи свое мнение о фильме" id="floatingTextarea2" style="height: 100px"></textarea>
+                                <textarea name="comment" class="form-control" placeholder="Укажи свое мнение о фильме" id="floatingTextarea2" style="height: 100px"></textarea>
                                 <label for="floatingTextarea2">Комментарий</label>
                             </div>
-                            <button type="button" class="btn btn-primary mt-2">Оставить отзыв</button>
+                            <?php if ($session->has('comment')) { ?>
+                                <?php foreach ($session->getFlash('comment') as $error) {?>
+                                    <div id="password" class="invalid-feedback">
+                                        <?= $error ?>
+                                    </div>
+                                <?php } ?>
+                            <?php } ?>
+                            <button type="submit" class="btn btn-primary mt-2">Оставить отзыв</button>
                         </form>
                         <?php }else{ ?>
                         <div class="alert alert-info m-3">
