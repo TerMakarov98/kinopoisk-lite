@@ -5,12 +5,14 @@ namespace App\Kernel\View;
 use App\Kernel\Auth\AuthInterface;
 use App\Kernel\Exceptions\ViewNotFoundException;
 use App\Kernel\Session\SessionInterface;
+use App\Kernel\Storage\StorageInterface;
 
 class View implements ViewInterface
 {
     public function __construct(
         private SessionInterface $session,
-        private AuthInterface $auth
+        private AuthInterface $auth,
+        private StorageInterface $storage
     ){}
 
     public function page(string $name, array $data = [], string $title = ''): void
@@ -48,7 +50,8 @@ class View implements ViewInterface
         return [
             'view' => $this,
             'session' => $this->session,
-            'auth' => $this->auth
+            'auth' => $this->auth,
+            'storage' => $this->storage,
         ];
     }
 
