@@ -74,6 +74,7 @@ $view->component('start');
                     <?php } ?>
                 </select>
             </div>
+
             <div class="row g-2">
                 <button type="submit" class="btn btn-primary">Добавить</button>
             </div>

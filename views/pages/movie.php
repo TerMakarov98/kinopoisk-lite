@@ -66,55 +66,17 @@ $view->component('start');
                     <div class="col-md-8">
                         <div class="card-body">
                             <h1 class="card-title"><?= $movie->name() ?></h1>
-                            <p class="card-text">Оценка <span class="badge bg-warning warn__badge">7.9</span></p>
+                            <p class="card-text">Оценка <span class="badge bg-warning warn__badge"><?= $movie->avgRating() ?></span></p>
                             <p class="card-text"><?= $movie->description() ?></p>
                             <p class="card-text"><small class="text-body-secondary">Добавлен <?= $movie->createdAt() ?></small></p>
                             <h4>Отзывы</h4>
                             <div class="one-movie__reviews">
-                                <div class="card">
-                                    <div class="card-header">
-                                        Пользователь: hello@areaweb.su
-                                    </div>
-                                    <div class="card-body">
-                                        <blockquote class="blockquote mb-0">
-                                            <p>В сериале и теперь хватает брутальной жестокости и разбросанных по кадрам кишок. Более того, первые эпизоды третьего сезона могут похвастаться одними из самых мерзких (но по-своему креативных) сцен во всём шоу.</p>
-                                            <footer class="blockquote-footer">Оценка <span class="badge bg-warning warn__badge">8</span></footer>
-                                        </blockquote>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-header">
-                                        Пользователь: hello@areaweb.su
-                                    </div>
-                                    <div class="card-body">
-                                        <blockquote class="blockquote mb-0">
-                                            <p>В сериале и теперь хватает брутальной жестокости и разбросанных по кадрам кишок. Более того, первые эпизоды третьего сезона могут похвастаться одними из самых мерзких (но по-своему креативных) сцен во всём шоу.</p>
-                                            <footer class="blockquote-footer">Оценка <span class="badge bg-warning warn__badge">8</span></footer>
-                                        </blockquote>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-header">
-                                        Пользователь: hello@areaweb.su
-                                    </div>
-                                    <div class="card-body">
-                                        <blockquote class="blockquote mb-0">
-                                            <p>В сериале и теперь хватает брутальной жестокости и разбросанных по кадрам кишок. Более того, первые эпизоды третьего сезона могут похвастаться одними из самых мерзких (но по-своему креативных) сцен во всём шоу.</p>
-                                            <footer class="blockquote-footer">Оценка <span class="badge bg-warning warn__badge">8</span></footer>
-                                        </blockquote>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-header">
-                                        Пользователь: hello@areaweb.su
-                                    </div>
-                                    <div class="card-body">
-                                        <blockquote class="blockquote mb-0">
-                                            <p>В сериале и теперь хватает брутальной жестокости и разбросанных по кадрам кишок. Более того, первые эпизоды третьего сезона могут похвастаться одними из самых мерзких (но по-своему креативных) сцен во всём шоу.</p>
-                                            <footer class="blockquote-footer">Оценка <span class="badge bg-warning warn__badge">8</span></footer>
-                                        </blockquote>
-                                    </div>
-                                </div>
+                                <?php foreach ($movie->reviews() as $review) {
+                                    $view->component('review_card', [
+                                        'review' => $review,
+                                    ]);
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>

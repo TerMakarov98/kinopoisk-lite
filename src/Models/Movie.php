@@ -10,9 +10,31 @@ class Movie
         private string $description,
         private string $preview,
         private int    $category,
-        private string $createdAt
+        private string $createdAt,
+        private array  $reviews = [],
     )
     {
+    }
+
+    /**
+     * @return array<Review>
+     */
+    public function reviews(): array
+    {
+        return $this->reviews;
+    }
+
+    public function avgRating(): float
+    {
+        $ratings = array_map(function (Review $review) {
+            return $review->rating();
+        }, $this->reviews);
+
+        if (count($ratings) === 0) {
+            return 0;
+        }
+
+        return round(array_sum($ratings) / count($ratings), 1);
     }
 
     public function createdAt(): string
